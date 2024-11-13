@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymelaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>Edit Order</title>
+    </head>
+    <body>
+        <h1>Edit Order</h1>
+        <form th:action="@{/edit}" method="post">
+            <input type="hidden" th:name="id" th:value="${order.id}">
+
+            <label for="menuName">Menu Name:</label>
+            <input type="text" id="menuName" name="menuName" th:value="${order.menuName}" readonly>
+
+            <label for="count">Count:</label>
+            <input type="number" id="count" name="count" th:value="${order.count}" min="1">
+
+            <button type="submit">Update Order</button>
+        </form>
+    </body>
+</html>
