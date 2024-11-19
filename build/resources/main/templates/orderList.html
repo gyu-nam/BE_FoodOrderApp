@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Order List</title>
+</head>
+<body>
+<h1>주문 목록</h1>
+<ul>
+    <li th:each="order : ${orders}">
+        <span th:text="${order.menuName}">Menu Name</span> -
+        <span th:text="${order.count}">Count</span>
+        <form th:action="@{/edit/{id}(id=${order.id})}" method="get">
+            <button type="submit">Edit</button>
+        </form>
+        <form th:action="@{/cancel/{id}(id=${order.id})}" method="post">
+            <button type="submit">Cancel</button>
+        </form>
+    </li>
+</ul>
+<a th:href="@{/}">Back to Menu</a>
+</body>
+</html>
