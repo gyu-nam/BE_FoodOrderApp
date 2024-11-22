@@ -7,29 +7,29 @@ import jakarta.persistence.*;
 public class Food {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long foodId;
 
     @Column(nullable = false)
-    private String name;
+    private String foodName;
 
     @Column(nullable = false)
     private double price;
 
-    public Food() {}
+    protected Food() {}
 
-    public Food(Long id,String name, double price) {
-        this.id = id;
-        this.name = name;
+    public Food(Long foodId,String foodName, double price) {
+        this.foodId = foodId;
+        this.foodName = foodName;
         this.price = price;
     }
 
     //Getter
-    public Long getId() {
-        return id;
+    public Long getFoodId() {
+        return foodId;
     }
 
-    public String getName() {
-        return name;
+    public String getFoodName() {
+        return foodName;
     }
 
     public double getPrice() {
@@ -37,8 +37,8 @@ public class Food {
     }
 
     //Setter
-    public void setName(String name) {
-        this.name = name;
+    public void setFoodName(String foodName) {
+        this.foodName = foodName;
     }
 
     public void setPrice(double price) {

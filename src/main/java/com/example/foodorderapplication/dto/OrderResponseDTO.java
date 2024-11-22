@@ -1,7 +1,8 @@
 package com.example.foodorderapplication.dto;
 
-public record OrderDTO(
+public record OrderResponseDTO(
         Long id,
-        String menuName,
+        FoodDTO food,
+        UserDTO user,
         Integer count
 ){}

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="45dea2e2-cd7d-4f51-b197-04a7c814cdd8" name="food ordering server">
+        <fileTransfer accessType="SFTP" host="54.180.238.179" port="22" sshConfigId="fae6e688-7443-4d70-8c4a-f3478166e9a1" sshConfig="ec2-user@54.180.238.179:22 key" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
