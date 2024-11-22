@@ -4,7 +4,7 @@ spring:
   config:
     import: "application-secret.yml"
   datasource:
-    url: jdbc:mysql://localhost:3306/food
+    url: jdbc:mysql://54.180.238.179:3306/food
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:

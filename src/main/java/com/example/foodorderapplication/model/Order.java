@@ -9,17 +9,23 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String menuName;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "food_id", nullable = false)
+    private Food food;
 
     @Column(nullable = false)
     private Integer count;
 
     public Order() {}
 
-    public Order(Long id, String menuName, Integer count) {
+    public Order(Long id, User user, Food food, Integer count) {
         this.id = id;
-        this.menuName = menuName;
+        this.user = user;
+        this.food = food;
         this.count = count;
     }
 
@@ -27,18 +33,29 @@ public class Order {
     public Long getId() {
         return id;
     }
-    public String getMenuName() {
-        return menuName;
+
+    public User getUser() {
+        return user;
     }
+
+    public Food getFood() {
+        return food;
+    }
+
     public Integer getCount() {
         return count;
     }
 
     //SETTER
-    public void setMenuName(String menuName) {
-        this.menuName = menuName;
+    public void setUser(User user) {
+        this.user = user;
     }
-    public void setCount(Integer count) {
+
+    public void setFood(Food food){
+        this.food = food;
+    }
+
+    public void setCount(Integer count){
         this.count = count;
     }
 
