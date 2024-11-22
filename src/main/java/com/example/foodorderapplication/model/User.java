@@ -9,28 +9,28 @@ import java.util.List;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long userId;
 
     @Column(nullable = false)
-    private String name;
+    private String userName;
 
     @OneToMany(mappedBy ="user", cascade = CascadeType.ALL)
     private List<Order> orders;
 
-    public User() {}
+    protected User() {}
 
-    public User(Long id, String name) {
-        this.id = id;
-        this.name = name;
+    public User(Long userId, String userName) {
+        this.userId = userId;
+        this.userName = userName;
     }
 
     //Getter
-    public Long getId() {
-        return id;
+    public Long getUserId() {
+        return userId;
     }
 
-    public String getName() {
-        return name;
+    public String getUserName() {
+        return userName;
     }
 
     public List<Order> getOrders() {
@@ -38,8 +38,8 @@ public class User {
     }
 
     //Setter
-    public void setName(String name) {
-        this.name = name;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public void setOrders(List<Order> orders) {

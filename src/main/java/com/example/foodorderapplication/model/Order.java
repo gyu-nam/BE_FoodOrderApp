@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long orderId;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
@@ -20,10 +20,10 @@ public class Order {
     @Column(nullable = false)
     private Integer count;
 
-    public Order() {}
+    protected Order() {}
 
-    public Order(Long id, User user, Food food, Integer count) {
-        this.id = id;
+    public Order(Long orderId, Food food, User user, Integer count) {
+        this.orderId = orderId;
         this.user = user;
         this.food = food;
         this.count = count;
@@ -31,7 +31,7 @@ public class Order {
 
     //GETTER
     public Long getId() {
-        return id;
+        return orderId;
     }
 
     public User getUser() {

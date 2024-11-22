@@ -1,55 +1,41 @@
 package com.example.foodorderapplication.controller;
 
-import com.example.foodorderapplication.dto.OrderDTO;
+import com.example.foodorderapplication.dto.OrderRequestDTO;
+import com.example.foodorderapplication.dto.OrderResponseDTO;
 import com.example.foodorderapplication.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.ui.Model;
 import java.util.List;
 
-@Controller
-@RequestMapping
+@RestController
+@RequestMapping("/orders")
 public class OrderController {
 
     @Autowired
     private OrderService orderService;
 
-    @GetMapping("/")
-    public String displayMenu() {
-        return "menu";
+    @GetMapping
+    public List<OrderResponseDTO> getAllOrders(){
+        return orderService.getAllOrders();
     }
 
-    @GetMapping("/orders")
-    public String displayOrders(Model model) {
-        List<OrderDTO> orders = orderService.getAllOrders();
-        model.addAttribute("orders", orders);
-        return "orderList";
+    @GetMapping("/{id})")
+    public OrderResponseDTO getOrderById (@PathVariable Long id) {
+        return orderService.getOrdersById(id);
     }
 
-    @PostMapping("/add")
-    public String addOrder(@ModelAttribute OrderDTO dto) {
-        orderService.addOrder(dto);
-        return "redirect:/orders";
+    @PostMapping
+    public OrderResponseDTO addOrder(@RequestBody OrderRequestDTO orderRequestDTO) {
+        return orderService.addOrder(orderRequestDTO);
     }
 
-    @GetMapping("/edit/{id}")
-    public String showUpdateOrderForm(@PathVariable Long id, Model model) {
-        OrderDTO dto = orderService.getOrdersById(id);
-        model.addAttribute("order", dto);
-        return "editOrderForm";
+    @PutMapping("/{id}")
+    public OrderResponseDTO updateOrder(@PathVariable Long id, @RequestBody OrderResponseDTO responseDTO){
+        return orderService.updateOrder(id, responseDTO);
     }
 
-    @PostMapping("/edit")
-    public String updateOrder(@ModelAttribute OrderDTO dto) {
-        orderService.updateOrder(dto.id(), dto);
-        return "redirect:/orders";
-    }
-
-    @PostMapping("/cancel/{id}")
-    public String cancelOrder(@PathVariable Long id) {
+    @DeleteMapping("/{id}")
+    public void cancelOrder(@PathVariable Long id) {
         orderService.cancelOrder(id);
-        return "redirect:/orders";
     }
-
 }
