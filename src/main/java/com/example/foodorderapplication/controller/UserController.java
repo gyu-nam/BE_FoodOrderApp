@@ -1,5 +1,6 @@
 package com.example.foodorderapplication.controller;
 
+import com.example.foodorderapplication.dto.SignUpRequestDTO;
 import com.example.foodorderapplication.dto.UserDTO;
 import com.example.foodorderapplication.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +21,8 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) {
-        UserDTO createdUser = userService.createUser(userDTO);
+    public ResponseEntity<UserDTO> createUser(@RequestBody SignUpRequestDTO signUpRequestDTO) {
+        UserDTO createdUser = userService.createUser(signUpRequestDTO);
         return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     }
 }

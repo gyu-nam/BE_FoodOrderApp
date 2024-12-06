@@ -31,23 +31,10 @@ public class OrderService {
         this.userRepository = userRepository;
     }
 
-    // Order Entity >> OrderDTO
-    public OrderResponseDTO convertToDTO(Order order) {
-        FoodDTO foodDTO = new FoodDTO(order.getFood().getFoodId(), order.getFood().getFoodName(), order.getFood().getPrice());
-        UserDTO userDTO = new UserDTO(order.getUser().getUserId(), order.getUser().getUserName());
-        return new OrderResponseDTO(order.getId(), foodDTO, userDTO, order.getCount());
-    }
-
-    //OrderDTO >> Order Entity
-    public Order convertToEntity(OrderRequestDTO dto) {
-        Food food = foodRepository.findById(dto.foodId()).orElseThrow(() -> new RuntimeException("Food not found"));
-        User user = userRepository.findById(dto.userId()).orElseThrow(() -> new RuntimeException("User not found"));
-        return new Order(null, food, user,dto.count());
-    }
-
     // 주문 조회
-    public List<OrderResponseDTO> getAllOrders() {
-        List<Order> orders = (List<Order>) orderRepository.findAll();
+    @Transactional
+    public List<OrderResponseDTO> getOrdersByUserId(Long userId) {
+        List<Order> orders = orderRepository.findByUserUserId(userId);
         List<OrderResponseDTO> orderDTOs = new ArrayList<>();
 
         for(Order order : orders) {
@@ -56,27 +43,20 @@ public class OrderService {
         return orderDTOs;
     }
 
-    public OrderResponseDTO getOrdersById(Long id) {
-       Order order = orderRepository.findById(id)
-               .orElseThrow(() -> new RuntimeException("Order not found"));
-        return convertToDTO(order);
-    }
-
     // 주문 추가
     @Transactional
-    public OrderResponseDTO addOrder(OrderRequestDTO dto) {
-        Order order = convertToEntity(dto);
+    public OrderResponseDTO addOrder(OrderRequestDTO orderRequestDto) {
+        Order order = convertToEntity(orderRequestDto);
         Order savedOrder = orderRepository.save(order);
         return convertToDTO(savedOrder);
     }
 
     // 주문 변경
     @Transactional
-    public OrderResponseDTO updateOrder(Long id, OrderResponseDTO dto) {
-        Order existingOrder = orderRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Order not found"));
-        existingOrder.setFood(foodRepository.findById(dto.food().id()).orElseThrow(() -> new RuntimeException("Food not found")));
-        existingOrder.setUser(userRepository.findById(dto.user().id()).orElseThrow(() -> new RuntimeException("User not found")));
+    public OrderResponseDTO updateOrder(Long orderId, Long userId, OrderResponseDTO dto) {
+        Order existingOrder = orderRepository.findByOrderIdAndUserUserId(orderId,userId)
+                .orElseThrow(() -> new RuntimeException("Order not found or you don't have access"));
+        existingOrder.setFood(foodRepository.findById(dto.food().foodId()).orElseThrow(() -> new RuntimeException("Food not found")));
         existingOrder.setCount(dto.count());
         Order updatedOrder = orderRepository.save(existingOrder);
         return convertToDTO(updatedOrder);
@@ -84,9 +64,23 @@ public class OrderService {
 
     // 주문 취소
     @Transactional
-    public void cancelOrder(Long id) {
-        Order existingOrder = orderRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Order not found"));
+    public void cancelOrder(Long orderId, Long userId) {
+        Order existingOrder = orderRepository.findByOrderIdAndUserUserId(orderId,userId)
+                .orElseThrow(() -> new RuntimeException("Order not found or you don't have access"));
         orderRepository.delete(existingOrder);
+    }
+
+    // Order Entity >> OrderDTO
+    private OrderResponseDTO convertToDTO(Order order) {
+        FoodDTO foodDTO = new FoodDTO(order.getFood().getFoodId(), order.getFood().getFoodName(), order.getFood().getPrice());
+        UserDTO userDTO = new UserDTO(order.getUser().getUserId(), order.getUser().getUserName(), order.getUser().getEmail());
+        return new OrderResponseDTO(order.getId(), foodDTO, userDTO, order.getCount());
+    }
+
+    //OrderDTO >> Order Entity
+    private Order convertToEntity(OrderRequestDTO dto) {
+        Food food = foodRepository.findById(dto.foodId()).orElseThrow(() -> new RuntimeException("Food not found"));
+        User user = userRepository.findById(dto.userId()).orElseThrow(() -> new RuntimeException("User not found"));
+        return new Order(food, user,dto.count());
     }
 }

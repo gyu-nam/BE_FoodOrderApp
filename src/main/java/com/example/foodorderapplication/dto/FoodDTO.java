@@ -1,7 +1,8 @@
 package com.example.foodorderapplication.dto;
 
 public record FoodDTO (
-        Long id,
+        Long foodId,
         String foodName,
-        Double price)
+        Double price
+)
 {}

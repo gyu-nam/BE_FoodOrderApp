@@ -11,31 +11,40 @@ import java.util.List;
 @RequestMapping("/orders")
 public class OrderController {
 
+    private final OrderService orderService;
+
     @Autowired
-    private OrderService orderService;
+    public OrderController(OrderService orderService) {
+        this.orderService = orderService;
+    }
 
+    // 주문 조회
     @GetMapping
-    public List<OrderResponseDTO> getAllOrders(){
-        return orderService.getAllOrders();
+    public List<OrderResponseDTO> getAllOrders(@SessionAttribute("userId") Long userId) {
+        return orderService.getOrdersByUserId(userId);
     }
 
-    @GetMapping("/{id})")
-    public OrderResponseDTO getOrderById (@PathVariable Long id) {
-        return orderService.getOrdersById(id);
-    }
-
+    // 주문 추가
     @PostMapping
-    public OrderResponseDTO addOrder(@RequestBody OrderRequestDTO orderRequestDTO) {
-        return orderService.addOrder(orderRequestDTO);
+    public OrderResponseDTO addOrder(@RequestBody OrderRequestDTO orderRequestDTO, @SessionAttribute("userId") Long userId) {
+        OrderRequestDTO updatedOrderRequestDTO = new OrderRequestDTO(
+                orderRequestDTO.foodId(),
+                userId,
+                orderRequestDTO.count()
+        );
+
+        return orderService.addOrder(updatedOrderRequestDTO);
     }
 
-    @PutMapping("/{id}")
-    public OrderResponseDTO updateOrder(@PathVariable Long id, @RequestBody OrderResponseDTO responseDTO){
-        return orderService.updateOrder(id, responseDTO);
+    // 주문 수정
+    @PutMapping("/{orderId}")
+    public OrderResponseDTO updateOrder(@PathVariable("orderId") Long orderId, @RequestBody OrderResponseDTO responseDTO, @SessionAttribute("userId") Long userId) {
+        return orderService.updateOrder(orderId, userId, responseDTO);
     }
 
-    @DeleteMapping("/{id}")
-    public void cancelOrder(@PathVariable Long id) {
-        orderService.cancelOrder(id);
+    // 주문 취소
+    @DeleteMapping("/{orderId}")
+    public void cancelOrder(@PathVariable("orderId") Long orderId, @SessionAttribute("userId") Long userId) {
+        orderService.cancelOrder(orderId, userId);
     }
 }
