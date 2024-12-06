@@ -22,10 +22,9 @@ public class Order {
 
     protected Order() {}
 
-    public Order(Long orderId, Food food, User user, Integer count) {
-        this.orderId = orderId;
-        this.user = user;
+    public Order(Food food, User user, Integer count) {
         this.food = food;
+        this.user = user;
         this.count = count;
     }
 

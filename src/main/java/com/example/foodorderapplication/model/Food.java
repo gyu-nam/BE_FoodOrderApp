@@ -17,8 +17,7 @@ public class Food {
 
     protected Food() {}
 
-    public Food(Long foodId,String foodName, double price) {
-        this.foodId = foodId;
+    public Food(String foodName, double price) {
         this.foodName = foodName;
         this.price = price;
     }

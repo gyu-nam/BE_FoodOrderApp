@@ -1,5 +1,6 @@
 package com.example.foodorderapplication.service;
 
+import com.example.foodorderapplication.dto.SignUpRequestDTO;
 import com.example.foodorderapplication.dto.UserDTO;
 import com.example.foodorderapplication.model.User;
 import com.example.foodorderapplication.repository.UserRepository;
@@ -19,10 +20,10 @@ public class UserService {
 
     // 사용자 생성
     @Transactional
-    public UserDTO createUser(UserDTO userDTO) {
-        User user = new User(null, userDTO.userName());
+    public UserDTO createUser(SignUpRequestDTO signUpRequestDTO) {
+        User user = new User(signUpRequestDTO.userName(), signUpRequestDTO.email(), signUpRequestDTO.password());
         User savedUser = userRepository.save(user);
-        return new UserDTO(savedUser.getUserId(), savedUser.getUserName());
+        return new UserDTO(savedUser.getUserId(), savedUser.getUserName(), savedUser.getEmail());
     }
 
 
